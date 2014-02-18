@@ -51,6 +51,12 @@ parseURL() {
 
         URL=${ARGS[ ${#ARGS[@]} - 1 ]}
 
+        if [[ ! $URL =~ ^"http" ]]; then
+
+            URL=false
+
+        fi
+
     fi
 
 }
@@ -63,7 +69,7 @@ saveScreenshot() {
 
     echo "Saved $DEVICE screenshot of $URL"
 
-    if [ $RETINA ]; then
+    if [ $RETINA = true ]; then
 
         webkit2png --scale=1 --zoom 2.0 --width $1 --fullsize -o "screenshot-$DEVICE-@2x" $URL &> /dev/null
 
@@ -76,7 +82,7 @@ saveScreenshot() {
 parseURL "$@"
 parseOptions "$@"
 
-if [[ $URL =~ ^"http" ]]; then
+if [ ! $URL = false ]; then
 
     saveScreenshot "320" "iPhone-Portrait"
     saveScreenshot "568" "iPhone-Landscape"
@@ -86,6 +92,8 @@ if [[ $URL =~ ^"http" ]]; then
 
 else
 
-    echo "No URL was specified."
+    printf "No URL was specified.\n\n"
+
+    displayHelp
 
 fi
