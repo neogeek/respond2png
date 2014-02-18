@@ -12,3 +12,13 @@ Options:
     -h, --help              show this help message and then exit
     -r, --retina            create retina versions
 ```
+
+##Screen Sizes
+
+| Device | Orientation | Width |
+| ------ | ----------- | ---- |
+| iPhone | Portrait | 320 |
+| iPhone | Landscape | 568 |
+| iPad | Portrait | 768 |
+| iPad | Landscape | 1024 |
+| Desktop |  | 1440 |
