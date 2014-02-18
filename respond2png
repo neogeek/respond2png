@@ -1,0 +1,91 @@
+#!/bin/bash
+
+URL=false
+RETINA=false
+
+displayVersion() {
+
+    echo "respond2png 0.1"
+
+}
+
+displayHelp() {
+
+    printf "Usage: respond2png [options] [http://www.example.com]\n\n"
+
+    echo "Options:"
+    echo "  -v, --version           show the version number and then exit"
+    echo "  -h, --help              show this help message and then exit"
+    echo ""
+    echo "  -r, --retina            create retina versions"
+
+}
+
+parseOptions() {
+
+    local ARGS=$#
+
+    while [ $ARGS -ne 0 ]; do
+
+        case $1 in
+
+            -v | --version) displayVersion; exit;;
+            -h | --help) displayHelp; exit;;
+            -r | --retina) RETINA=true;
+
+            # ?*) echo -e "Invalid option $1\n"; displayHelp; exit;;
+
+        esac
+
+        ARGS=$((ARGS-1))
+
+    done
+
+}
+
+parseURL() {
+
+    local ARGS=($@)
+
+    if [ $ARGS ]; then
+
+        URL=${ARGS[ ${#ARGS[@]} - 1 ]}
+
+    fi
+
+}
+
+saveScreenshot() {
+
+    local DEVICE=$2
+
+    webkit2png --scale=1 --width $1 --fullsize -o "screenshot-$DEVICE" $URL &> /dev/null
+
+    echo "Saved $DEVICE screenshot of $URL"
+
+    if [ $RETINA ]; then
+
+        webkit2png --scale=1 --zoom 2.0 --width $1 --fullsize -o "screenshot-$DEVICE-@2x" $URL &> /dev/null
+
+        echo "Saved $DEVICE (@2x) screenshot of $URL"
+
+    fi
+
+}
+
+parseURL "$@"
+parseOptions "$@"
+
+if [[ $URL =~ ^"http" ]]; then
+
+    saveScreenshot "320" "iPhone-Portrait"
+    saveScreenshot "568" "iPhone-Landscape"
+    saveScreenshot "768" "iPad-Portrait"
+    saveScreenshot "1024" "iPad-Landscape"
+    saveScreenshot "1440" "Desktop"
+
+else
+
+    echo "No URL was specified."
+
+fi
