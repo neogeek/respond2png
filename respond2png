@@ -1,98 +1,140 @@
 #!/bin/bash
 
-URL=false
+REDON=`tput setaf 1`
+GREENON=`tput setaf 2`
+COLOROFF=`tput sgr0`
+
+IOS=false
+ANDROID=false
+
+LANDSCAPE=false
 RETINA=false
+
+OUTPUT="screenshot"
 
 displayVersion() {
 
-    echo "respond2png 0.1"
+    echo "respond2png 0.2"
 
 }
 
 displayHelp() {
 
-    printf "Usage: respond2png [options] [http://www.example.com]\n\n"
+    printf "Usage: respond2png [options] [http://localhost/]\n\n"
 
     echo "Options:"
-    echo "  -v, --version           show the version number and then exit"
-    echo "  -h, --help              show this help message and then exit"
+    echo "   -v, --version             show the version number and then exit"
+    echo "   -h, --help                show this help message and then exit"
     echo ""
-    echo "  -r, --retina            create retina versions"
+    echo "   -i, --ios                 create iOS device sizes"
+    echo "   -a, --android             create Android device sizes"
+    echo ""
+    echo "   -l, --landscape           create landscape versions"
+    echo "   -r, --retina              create retina versions"
+    echo ""
+    echo "   -o=name, --output=name    change name of saved files"
 
 }
 
 parseOptions() {
 
-    local ARGS=$#
+    local args=(${@// /})
 
-    while [ $ARGS -ne 0 ]; do
+    for arg in "${args[@]}"
+    do
 
-        case $1 in
+        case $arg in
 
-            -v | --version) displayVersion; exit;;
-            -h | --help) displayHelp; exit;;
-            -r | --retina) RETINA=true;
+            -v | --version ) displayVersion; exit;;
+            -h | --help ) displayHelp; exit;;
 
-            # ?*) echo -e "Invalid option $1\n"; displayHelp; exit;;
+            -i | --ios ) IOS=true;;
+            -a | --android ) ANDROID=true;;
+
+            -l | --landscape ) LANDSCAPE=true;;
+            -r | --retina ) RETINA=true;;
+
+            -o=* | --output=* ) OUTPUT=`echo $arg | sed -e 's/-o=//' -e "s/--output=//"`;;
+
+            http* ) URL=$arg;;
+
+            ?* ) echo "Invalid option $arg"; displayHelp; exit;;
 
         esac
-
-        ARGS=$((ARGS-1))
 
     done
 
 }
 
-parseURL() {
+saveScreenshot() {
 
-    local ARGS=($@)
+    webkit2png --scale=1 --width $1 --fullsize -o "$OUTPUT-$2" $URL &> /dev/null
 
-    if [ $ARGS ]; then
+    printf "Saved ${REDON}%s${COLOROFF} screenshot to ${REDON}%s${COLOROFF}\n" $2 $OUTPUT-$2
 
-        URL=${ARGS[ ${#ARGS[@]} - 1 ]}
+    if $RETINA; then
 
-        if [[ ! $URL =~ ^"http" ]]; then
+        webkit2png --scale=1 --zoom 2.0 --width $1 --fullsize -o "$OUTPUT-$2-@2x" $URL &> /dev/null
 
-            URL=false
+        printf "Saved ${REDON}%s${COLOROFF} (@2x) screenshot to ${REDON}%s${COLOROFF}\n" $2 $OUTPUT-$2-@2x
 
+    fi
+
+}
+
+parseOptions "$@"
+
+if [ $URL ]; then
+
+    if $IOS; then
+
+        saveScreenshot "320" "iPhone4-Portrait"
+
+        if $LANDSCAPE; then
+            saveScreenshot "480" "iPhone4-Landscape"
+        fi
+
+        saveScreenshot "320" "iPhone5-Portrait"
+
+        if $LANDSCAPE; then
+            saveScreenshot "568" "iPhone5-Landscape"
+        fi
+
+        saveScreenshot "768" "iPad-Portrait"
+
+        if $LANDSCAPE; then
+            saveScreenshot "1024" "iPad-Landscape"
         fi
 
     fi
 
-}
+    if $ANDROID; then
 
-saveScreenshot() {
+        saveScreenshot "360" "Nexus5-Portrait"
 
-    local DEVICE=$2
+        if $LANDSCAPE; then
+            saveScreenshot "640" "Nexus5-Landscape"
+        fi
 
-    webkit2png --scale=1 --width $1 --fullsize -o "screenshot-$DEVICE" $URL &> /dev/null
+        saveScreenshot "600" "Nexus7-Portrait"
 
-    echo "Saved $DEVICE screenshot of $URL"
+        if $LANDSCAPE; then
+            saveScreenshot "960" "Nexus7-Landscape"
+        fi
 
-    if [ $RETINA = true ]; then
+        saveScreenshot "800" "Nexus10-Portrait"
 
-        webkit2png --scale=1 --zoom 2.0 --width $1 --fullsize -o "screenshot-$DEVICE-@2x" $URL &> /dev/null
-
-        echo "Saved $DEVICE (@2x) screenshot of $URL"
+        if $LANDSCAPE; then
+            saveScreenshot "1280" "Nexus10-Landscape"
+        fi
 
     fi
 
-}
-
-parseURL "$@"
-parseOptions "$@"
-
-if [ ! $URL = false ]; then
-
-    saveScreenshot "320" "iPhone-Portrait"
-    saveScreenshot "568" "iPhone-Landscape"
-    saveScreenshot "768" "iPad-Portrait"
-    saveScreenshot "1024" "iPad-Landscape"
     saveScreenshot "1440" "Desktop"
 
-else
+    echo "Completed at ${GREENON}`date +"%m-%d-%Y %r"`${COLOROFF}"
 
-    printf "No URL was specified.\n\n"
+else
 
     displayHelp
 
