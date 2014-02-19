@@ -2,6 +2,12 @@
 
 > A simple bash script for creating multiple screenshots of a responsive design. Requires [webkit2png](https://github.com/paulhammond/webkit2png/).
 
+##Install
+
+```bash
+curl https://raw.github.com/neogeek/respond2png/master/respond2png -o /usr/local/bin/respond2png && chmod +x /usr/local/bin/respond2png
+```
+
 ##Usage
 
 ```bash
