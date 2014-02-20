@@ -13,7 +13,7 @@ curl https://raw.github.com/neogeek/respond2png/master/respond2png -o /usr/local
 ```bash
 Usage: respond2png [options] [http://localhost/]
 
-Options:
+OPTIONS:
    -v, --version             show the version number and then exit
    -h, --help                show this help message and then exit
 

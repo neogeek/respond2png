@@ -12,9 +12,21 @@ RETINA=false
 
 OUTPUT="screenshot"
 
+checkRequirements() {
+
+    if ! hash webkit2png &> /dev/null; then
+
+        printf "${REDON}webkit2png was not found.${COLOROFF} Please install to continue. http://www.paulhammond.org/webkit2png/\n"
+
+        exit
+
+    fi
+
+}
+
 displayVersion() {
 
-    echo "respond2png 0.2"
+    echo "respond2png 0.3"
 
 }
 
@@ -22,7 +34,7 @@ displayHelp() {
 
     printf "Usage: respond2png [options] [http://localhost/]\n\n"
 
-    echo "Options:"
+    echo "OPTIONS:"
     echo "   -v, --version             show the version number and then exit"
     echo "   -h, --help                show this help message and then exit"
     echo ""
@@ -81,6 +93,8 @@ saveScreenshot() {
     fi
 
 }
+
+checkRequirements
 
 parseOptions "$@"
 
