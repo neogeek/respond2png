@@ -5,7 +5,7 @@
 ##Install
 
 ```bash
-$ curl https://raw.github.com/neogeek/respond2png/master/respond2png -o /usr/local/bin/respond2png && chmod +x /usr/local/bin/respond2png
+$ curl https://raw.githubusercontent.com/neogeek/respond2png/master/respond2png -o /usr/local/bin/respond2png && chmod +x /usr/local/bin/respond2png
 ```
 
 ##Usage
