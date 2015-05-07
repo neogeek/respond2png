@@ -1,14 +1,14 @@
-#respond2png
+# respond2png
 
 > A simple bash script for creating multiple screenshots of a responsive design. Requires [webkit2png](https://github.com/paulhammond/webkit2png/).
 
-##Install
+## Install
 
 ```bash
 $ curl https://raw.githubusercontent.com/neogeek/respond2png/master/respond2png -o /usr/local/bin/respond2png && chmod +x /usr/local/bin/respond2png
 ```
 
-##Usage
+## Usage
 
 ```bash
 Usage: respond2png [options] [http://localhost/]
@@ -26,7 +26,7 @@ OPTIONS:
    -o=name, --output=name    change name of saved files
 ```
 
-##Screen Sizes
+## Screen Sizes
 
 | Device | Orientation | Width |
 | ------ | ----------- | ---- |
@@ -42,7 +42,7 @@ OPTIONS:
 | Nexus10 | Landscape | 1280 |
 | Desktop | n/a | 1440 |
 
-##Grunt Setup
+## Grunt Setup
 
 ```javascript
 grunt.loadNpmTasks('grunt-shell');
