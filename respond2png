@@ -1,8 +1,10 @@
 #!/bin/bash
 
-REDON=`tput setaf 1`
-GREENON=`tput setaf 2`
-COLOROFF=`tput sgr0`
+VERSION=0.3
+
+REDON=$(tput setaf 1)
+GREENON=$(tput setaf 2)
+COLOROFF=$(tput sgr0)
 
 IOS=false
 ANDROID=false
@@ -16,7 +18,7 @@ checkRequirements() {
 
     if ! hash webkit2png &> /dev/null; then
 
-        printf "${REDON}webkit2png was not found.${COLOROFF} Please install to continue. http://www.paulhammond.org/webkit2png/\n"
+        printf "%swebkit2png was not found.%s Please install to continue. http://www.paulhammond.org/webkit2png/\n" "$REDON" "$COLOROFF"
 
         exit
 
@@ -26,7 +28,7 @@ checkRequirements() {
 
 displayVersion() {
 
-    echo "respond2png 0.3"
+    echo "respond2png $VERSION"
 
 }
 
@@ -66,7 +68,7 @@ parseOptions() {
             -l | --landscape ) LANDSCAPE=true;;
             -r | --retina ) RETINA=true;;
 
-            -o=* | --output=* ) OUTPUT=`echo $arg | sed -e 's/-o=//' -e "s/--output=//"`;;
+            -o=* | --output=* ) OUTPUT=$(echo "$arg" | sed -e 's/-o=//' -e "s/--output=//");;
 
             http* ) URL=$arg;;
 
@@ -80,15 +82,15 @@ parseOptions() {
 
 saveScreenshot() {
 
-    webkit2png --scale=1 --width $1 --fullsize -o "$OUTPUT-$2" $URL &> /dev/null
+    webkit2png --scale=1 --width "$1" --fullsize -o "$OUTPUT-$2" "$URL" &> /dev/null
 
-    printf "Saved ${REDON}%s${COLOROFF} screenshot to ${REDON}%s${COLOROFF}\n" $2 $OUTPUT-$2
+    printf "Saved ${REDON}%s${COLOROFF} screenshot to ${REDON}%s${COLOROFF}\n" "$2" "$OUTPUT"-"$2"
 
     if $RETINA; then
 
-        webkit2png --scale=1 --zoom 2.0 --width $1 --fullsize -o "$OUTPUT-$2-@2x" $URL &> /dev/null
+        webkit2png --scale=1 --zoom 2.0 --width "$1" --fullsize -o "$OUTPUT-$2-@2x" "$URL" &> /dev/null
 
-        printf "Saved ${REDON}%s${COLOROFF} (@2x) screenshot to ${REDON}%s${COLOROFF}\n" $2 $OUTPUT-$2-@2x
+        printf "Saved ${REDON}%s${COLOROFF} (@2x) screenshot to ${REDON}%s${COLOROFF}\n" "$2" "$OUTPUT"-"$2"-@2x
 
     fi
 
@@ -98,7 +100,7 @@ checkRequirements
 
 parseOptions "$@"
 
-if [ $URL ]; then
+if [ "$URL" ]; then
 
     if $IOS; then
 
@@ -146,7 +148,7 @@ if [ $URL ]; then
 
     saveScreenshot "1440" "Desktop"
 
-    echo "Completed at ${GREENON}`date +"%m-%d-%Y %r"`${COLOROFF}"
+    echo "Completed at ${GREENON}$(date +"%m-%d-%Y %r")${COLOROFF}"
 
 else
 
