@@ -104,10 +104,16 @@ if [ "$URL" ]; then
 
     if $IOS; then
 
-        saveScreenshot "320" "iPhone4-Portrait"
+        saveScreenshot "375" "iPhone6-Portrait"
 
         if $LANDSCAPE; then
-            saveScreenshot "480" "iPhone4-Landscape"
+            saveScreenshot "667" "iPhone6-Landscape"
+        fi
+
+        saveScreenshot "414" "iPhone6Plus-Portrait"
+
+        if $LANDSCAPE; then
+            saveScreenshot "736" "iPhone6Plus-Landscape"
         fi
 
         saveScreenshot "320" "iPhone5-Portrait"

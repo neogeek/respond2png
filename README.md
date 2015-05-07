@@ -30,8 +30,12 @@ OPTIONS:
 
 | Device | Orientation | Width |
 | ------ | ----------- | ---- |
-| iPhone | Portrait | 320 |
-| iPhone | Landscape | 568 |
+| iPhone 6 | Portrait | 375 |
+| iPhone 6 | Landscape | 667 |
+| iPhone 6 Plus | Portrait | 414 |
+| iPhone 6 Plus | Landscape | 736 |
+| iPhone 5 | Portrait | 320 |
+| iPhone 5 | Landscape | 568 |
 | iPad | Portrait | 768 |
 | iPad | Landscape | 1024 |
 | Nexus5 | Portrait | 360 |
